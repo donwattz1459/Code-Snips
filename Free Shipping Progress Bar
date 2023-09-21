@@ -1,0 +1,29 @@
+// Display progress bar and message for free shipping
+function display_free_shipping_progress_bar_shortcode() {
+    // Set the free shipping threshold amount
+    $free_shipping_threshold = 35.00;
+    
+    // Get the cart total
+    $cart_total = WC()->cart->get_subtotal();
+    
+    // Calculate the progress percentage
+    $progress_percentage = ($cart_total / $free_shipping_threshold) * 100;
+    $progress_percentage = min($progress_percentage, 100); // Limit the progress to 100%
+    
+    // Output the progress bar
+    $output = '<div class="progress-bar-container">';
+    $output .= '<div class="progress-bar" style="width: ' . $progress_percentage . '%;"></div>';
+    
+    // Output the message
+    if ($cart_total < $free_shipping_threshold) {
+        $amount_needed = $free_shipping_threshold - $cart_total;
+        $output .= '<div class="progress-message">$' . number_format($amount_needed, 2) . ' until FREE shipping</div>';
+    } else {
+        $output .= '<div class="progress-message">You Qualify for FREE SHIPPING!</div>';
+    }
+    
+    $output .= '</div>';
+    
+    return $output;
+}
+add_shortcode('free_shipping_progress_bar', 'display_free_shipping_progress_bar_shortcode');
